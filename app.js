@@ -1,4 +1,3 @@
-cat > app.js <<'JS'
 // app.js - minimal, robust, no libs
 const AudioContextClass = window.AudioContext || window.webkitAudioContext;
 const ctx = new AudioContextClass();
