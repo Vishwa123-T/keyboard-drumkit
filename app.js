@@ -34,9 +34,12 @@ const samples = {
   cowbell: 'samples/cowbell.wav'
 };
 
+// in-memory decoded buffers (may be replaced by uploads)
 const bufferCache = {};
 async function loadBuffer(name) {
+  // if we've decoded a custom buffer, return it
   if (bufferCache[name]) return bufferCache[name];
+  // otherwise try to fetch default path (repo)
   const url = samples[name];
   try {
     const res = await fetch(url);
@@ -46,6 +49,8 @@ async function loadBuffer(name) {
     bufferCache[name] = buf;
     return buf;
   } catch (err) {
+    // fallback null -> synth fallback
+    console.warn('Sample load failed for', name, err);
     return null;
   }
 }
@@ -72,6 +77,7 @@ async function playSample(name, velocity = 1) {
     };
     return node;
   } else {
+    // synth fallback
     const osc = ctx.createOscillator();
     const g = ctx.createGain();
     osc.type = 'triangle';
@@ -120,5 +126,80 @@ window.addEventListener('keyup', e => {
   held.delete(key);
 });
 
+// prefetch default buffers (non-blocking)
 Object.keys(samples).forEach(k => loadBuffer(k));
+
+// simple unlock for mobile and browsers
 document.addEventListener('click',()=> { if (ctx.state==='suspended') ctx.resume(); }, {once:true});
+
+/* ----------------------
+   Sample uploader code
+   ---------------------- */
+const expectedNames = Object.keys(samples).map(s => s + '.wav'); // accept .wav default
+const dropzone = document.getElementById('dropzone');
+const fileInput = document.getElementById('fileInput');
+const uploadStatus = document.getElementById('uploadStatus');
+const resetBtn = document.getElementById('resetSamples');
+
+function setStatus(msg, isError=false) {
+  uploadStatus.textContent = msg;
+  uploadStatus.style.color = isError ? 'salmon' : 'lightgreen';
+}
+
+dropzone.addEventListener('click', ()=> fileInput.click());
+dropzone.addEventListener('dragover', (ev)=> { ev.preventDefault(); dropzone.classList.add('dragover'); });
+dropzone.addEventListener('dragleave', ()=> dropzone.classList.remove('dragover'));
+dropzone.addEventListener('drop', (ev)=> {
+  ev.preventDefault();
+  dropzone.classList.remove('dragover');
+  handleFiles(ev.dataTransfer.files);
+});
+
+fileInput.addEventListener('change', (ev)=> {
+  handleFiles(ev.target.files);
+  fileInput.value = '';
+});
+
+async function handleFiles(fileList) {
+  if (!fileList || !fileList.length) return;
+  setStatus('Decoding files...');
+  let accepted = 0, rejected = 0;
+  for (const f of Array.from(fileList)) {
+    const lower = f.name.toLowerCase();
+    // try to map by exact filename (kick.wav etc.) or by prefix (kick.mp3 -> kick)
+    let matchedKey = null;
+    for (const k of Object.keys(samples)) {
+      if (lower === k + '.wav' || lower === k + '.mp3' || lower === k) { matchedKey = k; break; }
+      // also allow filenames like 'kick-01.wav'
+      if (lower.startsWith(k + '-') || lower.startsWith(k + '_')) { matchedKey = k; break; }
+    }
+    if (!matchedKey) {
+      console.warn('Unrecognized sample name; skipping', f.name);
+      rejected++;
+      continue;
+    }
+    try {
+      const ab = await f.arrayBuffer();
+      const buf = await ctx.decodeAudioData(ab);
+      bufferCache[matchedKey] = buf;      // override decoded buffer in memory
+      accepted++;
+    } catch (err) {
+      console.error('Decode failed for', f.name, err);
+      rejected++;
+    }
+  }
+  if (accepted) {
+    setStatus(`Loaded ${accepted} file(s). Play keys to test.`);
+  } else {
+    setStatus(`No valid file names found. See expected list above.`, true);
+  }
+}
+
+// reset to default repo-hosted samples (clears bufferCache for keys so loadBuffer will fetch)
+resetBtn.addEventListener('click', ()=> {
+  Object.keys(bufferCache).forEach(k => delete bufferCache[k]);
+  setStatus('Reset to repo defaults. Re-fetching samples...');
+  Object.keys(samples).forEach(k => loadBuffer(k));
+});
+
+/* end uploader */

@@ -1,4 +1,3 @@
-cat > index.html <<'HTML'
 <!doctype html>
 <html lang="en">
 <head>
@@ -11,6 +10,7 @@ cat > index.html <<'HTML'
 <body>
   <main id="app">
     <h1>Keyboard Drum Kit</h1>
+
     <div id="kit">
       <div class="row">
         <div class="pad" data-sound="crash" data-key="Q"><kbd>Q</kbd><span>Crash</span></div>
@@ -45,13 +45,20 @@ cat > index.html <<'HTML'
         <option value="16">16 voices</option>
       </select>
       <button id="recordBtn">Record (WIP)</button>
-      <small>Drop custom .wav/.mp3 into <code>samples/</code> or use repo editor to replace files.</small>
     </section>
 
-    <footer><small>Open this page in Chrome. Click once to enable audio, then press keys.</small></footer>
+    <section id="uploader">
+      <h2>Upload Samples</h2>
+      <div id="dropzone">Drag & drop WAV/MP3 files here (or click to choose)</div>
+      <input id="fileInput" type="file" accept=".wav,.mp3,audio/*" multiple hidden/>
+      <div id="uinfo">Drop files named: kick.wav snare.wav hihat.wav tom1.wav tom2.wav floor.wav crash.wav ride.wav splash.wav china.wav clap.wav cowbell.wav</div>
+      <div id="uploadStatus" aria-live="polite"></div>
+      <button id="resetSamples">Reset to repo defaults</button>
+    </section>
+
+    <footer><small>Click page once to enable audio. Uploaded samples are stored in-memory in this browser only.</small></footer>
   </main>
 
   <script src="app.js"></script>
 </body>
 </html>
-HTML
