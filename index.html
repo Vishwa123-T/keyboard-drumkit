@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Keyboard Drum Kit</title>
   <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E">
   <link rel="manifest" href="manifest.json" />
 </head>
 <body>
@@ -12,33 +13,47 @@
     <h1>Keyboard Drum Kit</h1>
 
     <div id="kit">
-      <div class="row">
-        <div class="pad" data-sound="crash" data-key="Q"><kbd>Q</kbd><span>Crash</span></div>
-        <div class="pad" data-sound="splash" data-key="W"><kbd>W</kbd><span>Splash</span></div>
-        <div class="pad" data-sound="ride" data-key="E"><kbd>E</kbd><span>Ride</span></div>
-        <div class="pad" data-sound="china" data-key="R"><kbd>R</kbd><span>China</span></div>
-      </div>
+  <!-- Left (Hi-hat / Snare / Tom1 / Crash L) -->
+  <div class="row">
+    <div class="pad" data-sound="crash"  data-key="Q"><kbd>Q</kbd><span>Crash L</span></div>
+    <div class="pad" data-sound="hihat_open" data-key="W"><kbd>W</kbd><span>Hi-Hat Open</span></div>
+    <div class="pad" data-sound="splash" data-key="E"><kbd>E</kbd><span>Splash</span></div>
+  </div>
 
-      <div class="row">
-        <div class="pad" data-sound="hihat" data-key="A"><kbd>A</kbd><span>Hi-Hat</span></div>
-        <div class="pad" data-sound="snare" data-key="S"><kbd>S</kbd><span>Snare</span></div>
-        <div class="pad" data-sound="tom1" data-key="D"><kbd>D</kbd><span>Tom 1</span></div>
-        <div class="pad" data-sound="tom2" data-key="F"><kbd>F</kbd><span>Tom 2</span></div>
-      </div>
+  <div class="row">
+    <div class="pad" data-sound="hihat" data-key="A"><kbd>A</kbd><span>Hi-Hat Closed</span></div>
+    <div class="pad" data-sound="snare"  data-key="S"><kbd>S</kbd><span>Snare</span></div>
+    <div class="pad" data-sound="tom1"   data-key="D"><kbd>D</kbd><span>Tom 1</span></div>
+  </div>
 
-      <div class="row">
-        <div class="pad" data-sound="kick" data-key="Z"><kbd>Z</kbd><span>Bass</span></div>
-        <div class="pad" data-sound="floor" data-key="X"><kbd>X</kbd><span>Floor</span></div>
-        <div class="pad" data-sound="clap" data-key="C"><kbd>C</kbd><span>Clap</span></div>
-        <div class="pad" data-sound="cowbell" data-key="V"><kbd>V</kbd><span>Cowbell</span></div>
-        <div class="pad wide" data-sound="kick" data-key=" "><kbd>Space</kbd><span>Bass (Space)</span></div>
-      </div>
-    </div>
+  <div class="row">
+    <div class="pad" data-sound="kick" data-key=" "><kbd>Space</kbd><span>Kick</span></div>
+    <div class="pad" data-sound="ghost" data-key="X"><kbd>X</kbd><span>Ghost / Accent</span></div>
+    <div class="pad" data-sound="tom2"  data-key="C"><kbd>C</kbd><span>Tom 2 (left)</span></div>
+  </div>
 
+  <!-- Right (Ride / Toms / Floor / China / Crash R) -->
+  <div class="row">
+    <div class="pad" data-sound="ride"  data-key="U"><kbd>U</kbd><span>Ride</span></div>
+    <div class="pad" data-sound="china" data-key="I"><kbd>I</kbd><span>China</span></div>
+    <div class="pad" data-sound="crash2" data-key="O"><kbd>O</kbd><span>Crash R</span></div>
+  </div>
+
+  <div class="row">
+    <div class="pad" data-sound="tom2" data-key="J"><kbd>J</kbd><span>Tom 2 (right)</span></div>
+    <div class="pad" data-sound="floor" data-key="K"><kbd>K</kbd><span>Floor Tom</span></div>
+    <div class="pad" data-sound="cowbell" data-key="L"><kbd>L</kbd><span>Cowbell</span></div>
+  </div>
+
+  <div class="row">
+    <div class="pad" data-sound="perc" data-key=","><kbd>,</kbd><span>Perc Accent</span></div>
+    <div class="pad" data-sound="rim"  data-key="."><kbd>.</kbd><span>Rimshot</span></div>
+  </div>
+</div>
     <section id="controls">
       <label for="volume">Master Volume</label>
       <input id="volume" type="range" min="0" max="1" step="0.01" value="0.9"/>
-      <label for="attenuate">Polyphony</label>
+      <label for="poly">Polyphony</label>
       <select id="poly">
         <option value="4">4 voices</option>
         <option value="8" selected>8 voices</option>
