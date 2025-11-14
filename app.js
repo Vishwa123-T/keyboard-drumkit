@@ -122,4 +122,3 @@ window.addEventListener('keyup', e => {
 
 Object.keys(samples).forEach(k => loadBuffer(k));
 document.addEventListener('click',()=> { if (ctx.state==='suspended') ctx.resume(); }, {once:true});
-JS
