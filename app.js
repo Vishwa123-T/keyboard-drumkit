@@ -14,25 +14,57 @@ polyEl.addEventListener('change', e => maxVoices = Number(e.target.value));
 
 const pads = Array.from(document.querySelectorAll('.pad'));
 const keyToPad = {};
+// build mapping: map visible keys (letters uppercased), literal punctuation, and common code names
 pads.forEach(p => {
-  const k = p.dataset.key;
-  keyToPad[k.toUpperCase()] = p;
-});
+  const k = p.dataset.key; // what you put in HTML (e.g., "O" or "," or " ")
+  if (!k) return;
 
+  // map single-character visible keys (letters -> uppercase)
+  if (k.length === 1 && /^[a-z0-9]$/i.test(k)) {
+    keyToPad[k.toUpperCase()] = p;    // Key like 'O' -> 'O'
+  } else {
+    // punctuation or space: map literal as-is
+    keyToPad[k] = p;                  // Key like ',' or ' ' stays ','
+  }
+
+  // map physical code names for letters, e.g. KeyO, KeyM, KeyQ
+  if (/^[A-Z]$/.test(k.toUpperCase())) {
+    keyToPad['Key' + k.toUpperCase()] = p;
+  }
+
+  // map common code names for punctuation
+  if (k === ',') keyToPad['Comma'] = p;
+  if (k === '.') keyToPad['Period'] = p;
+  if (k === ' ') keyToPad['Space'] = p;
+  if (k === ';') keyToPad['Semicolon'] = p;
+  if (k === '/') keyToPad['Slash'] = p;
+
+  // respect an explicit data-code attribute if present
+  if (p.dataset.code) keyToPad[p.dataset.code] = p;
+});
 const samples = {
-  kick: 'samples/kick.wav',
-  snare: 'samples/snare.wav',
-  hihat: 'samples/hihat.wav',
-  tom1: 'samples/tom1.wav',
-  tom2: 'samples/tom2.wav',
-  floor: 'samples/floor.wav',
-  crash: 'samples/crash.wav',
-  ride: 'samples/ride.wav',
-  splash: 'samples/splash.wav',
-  china: 'samples/china.wav',
-  clap: 'samples/clap.wav',
-  cowbell: 'samples/cowbell.wav'
+  kick:       'samples/kick.wav',
+  snare:      'samples/snare.wav',
+  hihat:      'samples/hihat.wav',       // closed hi-hat
+  hihat_open: 'samples/hihat_open.wav',  // open hi-hat
+  tom1:       'samples/tom1.wav',
+  tom2:       'samples/tom2.wav',
+  floor:      'samples/floor.wav',
+  crash:      'samples/crash.wav',
+  crash2:     'samples/crash2.wav',
+  ride:       'samples/ride.wav',
+  splash:     'samples/splash.wav',
+  china:      'samples/china.wav',
+  clap:       'samples/clap.wav',
+  cowbell:    'samples/cowbell.wav',
+  ghost:      'samples/ghost.wav',
+  perc:       'samples/perc.wav',
+  rim:        'samples/rim.wav'
 };
+
+// expose for debugging in DevTools
+window.samples = samples;
+
 
 // in-memory decoded buffers (may be replaced by uploads)
 const bufferCache = {};
@@ -111,11 +143,11 @@ pads.forEach(p => {
 const held = new Set();
 window.addEventListener('keydown', e => {
   if (e.repeat) return;
-  const key = e.key.toUpperCase();
-  const pad = keyToPad[key];
+  // prefer visible single-character (letters normalized to uppercase), else use e.key as-is
+  const visible = (typeof e.key === 'string' && e.key.length === 1) ? e.key.toUpperCase() : e.key;
+  const pad = keyToPad[visible] || keyToPad[e.code] || keyToPad[e.key];
   if (!pad) return;
   if (ctx.state === 'suspended') ctx.resume();
-  held.add(key);
   const vel = e.shiftKey ? 1.0 : e.ctrlKey ? 0.7 : 0.9;
   triggerPad(pad, vel);
   e.preventDefault();

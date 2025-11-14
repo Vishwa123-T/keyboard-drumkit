@@ -1,6 +1,6 @@
 cat > style.css <<'CSS'
 :root{
-  --bg:#0f1115;
+  --bg:#0f1119;
   --card:#101216;
   --accent:#e6e6e6;
   --muted:#9aa0a6;
@@ -10,7 +10,7 @@ html,body{height:100%}
 body{
   margin:0;
   font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial;
-  background:linear-gradient(180deg,#0f1115 0%,#0b0c0f 100%);
+  background:linear-gradient(180deg,#fcbe78 0%,#9c46ed 100%);
   color:var(--accent);
   display:flex;
   align-items:center;
@@ -29,7 +29,7 @@ h1{margin:6px 0 12px;font-size:20px}
 #kit{display:flex;flex-direction:column;gap:12px}
 .row{display:flex;gap:12px;justify-content:center}
 .pad{
-  background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.06));
+  background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(84, 20, 20, 0.06));
   border-radius:10px;
   padding:14px;
   text-align:center;
@@ -40,19 +40,22 @@ h1{margin:6px 0 12px;font-size:20px}
 }
 .pad.wide{width:160px}
 .pad kbd{
+  color: #000;
   display:block;
   font-size:18px;
   font-weight:700;
   margin-bottom:6px;
 }
-.pad span{font-size:13px;color:var(--muted)}
+.pad span{font-size:13px;color:#410000;font-size: 0.85rem;}
 .pad.active{
-  transform:translateY(-6px) scale(1.02);
+  background: #4c96ff;
+  transform:translateY(-6px) scale(1.03);
   box-shadow:0 12px 30px rgba(0,0,0,0.7),0 0 20px rgba(255,255,255,0.03) inset;
+  transition: 0.05s;
   border:1px solid rgba(255,255,255,0.04);
 }
-#controls{margin-top:16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
-#controls label{font-size:13px;color:var(--muted)}
+#controls{margin-top:16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap; margin-bottom: 20px;}
+#controls label{font-size:13px;letter-spacing: .5px;font-weight: 600;color:#770000}
 #controls input[type=range]{width:200px}
 footer{margin-top:12px;color:var(--muted);font-size:12px}
 small code{background:rgba(255,255,255,0.03);padding:2px 6px;border-radius:4px;color:#cdd6df}

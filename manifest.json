@@ -1,10 +1,9 @@
-cat > manifest.json <<'JSON'
 {
   "name": "Keyboard Drum Kit",
   "short_name": "DrumKit",
-  "start_url": "/",
+  "start_url": "/keyboard-drumkit/",
   "display": "standalone",
   "background_color": "#0f1115",
-  "theme_color": "#0f1115"
+  "theme_color": "#0f1115",
+  "icons": []
 }
-JSON
