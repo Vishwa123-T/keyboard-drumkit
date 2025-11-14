@@ -1,0 +1,57 @@
+cat > index.html <<'HTML'
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Keyboard Drum Kit</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="manifest" href="manifest.json" />
+</head>
+<body>
+  <main id="app">
+    <h1>Keyboard Drum Kit</h1>
+    <div id="kit">
+      <div class="row">
+        <div class="pad" data-sound="crash" data-key="Q"><kbd>Q</kbd><span>Crash</span></div>
+        <div class="pad" data-sound="splash" data-key="W"><kbd>W</kbd><span>Splash</span></div>
+        <div class="pad" data-sound="ride" data-key="E"><kbd>E</kbd><span>Ride</span></div>
+        <div class="pad" data-sound="china" data-key="R"><kbd>R</kbd><span>China</span></div>
+      </div>
+
+      <div class="row">
+        <div class="pad" data-sound="hihat" data-key="A"><kbd>A</kbd><span>Hi-Hat</span></div>
+        <div class="pad" data-sound="snare" data-key="S"><kbd>S</kbd><span>Snare</span></div>
+        <div class="pad" data-sound="tom1" data-key="D"><kbd>D</kbd><span>Tom 1</span></div>
+        <div class="pad" data-sound="tom2" data-key="F"><kbd>F</kbd><span>Tom 2</span></div>
+      </div>
+
+      <div class="row">
+        <div class="pad" data-sound="kick" data-key="Z"><kbd>Z</kbd><span>Bass</span></div>
+        <div class="pad" data-sound="floor" data-key="X"><kbd>X</kbd><span>Floor</span></div>
+        <div class="pad" data-sound="clap" data-key="C"><kbd>C</kbd><span>Clap</span></div>
+        <div class="pad" data-sound="cowbell" data-key="V"><kbd>V</kbd><span>Cowbell</span></div>
+        <div class="pad wide" data-sound="kick" data-key=" "><kbd>Space</kbd><span>Bass (Space)</span></div>
+      </div>
+    </div>
+
+    <section id="controls">
+      <label for="volume">Master Volume</label>
+      <input id="volume" type="range" min="0" max="1" step="0.01" value="0.9"/>
+      <label for="attenuate">Polyphony</label>
+      <select id="poly">
+        <option value="4">4 voices</option>
+        <option value="8" selected>8 voices</option>
+        <option value="16">16 voices</option>
+      </select>
+      <button id="recordBtn">Record (WIP)</button>
+      <small>Drop custom .wav/.mp3 into <code>samples/</code> or use repo editor to replace files.</small>
+    </section>
+
+    <footer><small>Open this page in Chrome. Click once to enable audio, then press keys.</small></footer>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
+HTML

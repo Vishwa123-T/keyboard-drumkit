@@ -1,0 +1,59 @@
+cat > style.css <<'CSS'
+:root{
+  --bg:#0f1115;
+  --card:#101216;
+  --accent:#e6e6e6;
+  --muted:#9aa0a6;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial;
+  background:linear-gradient(180deg,#0f1115 0%,#0b0c0f 100%);
+  color:var(--accent);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+main#app{
+  width:100%;
+  max-width:900px;
+  background:rgba(255,255,255,0.02);
+  padding:18px;
+  border-radius:10px;
+  box-shadow:0 6px 30px rgba(0,0,0,0.6);
+}
+h1{margin:6px 0 12px;font-size:20px}
+#kit{display:flex;flex-direction:column;gap:12px}
+.row{display:flex;gap:12px;justify-content:center}
+.pad{
+  background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.06));
+  border-radius:10px;
+  padding:14px;
+  text-align:center;
+  width:110px;
+  user-select:none;
+  transition:transform .08s ease, box-shadow .08s ease;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.6);
+}
+.pad.wide{width:160px}
+.pad kbd{
+  display:block;
+  font-size:18px;
+  font-weight:700;
+  margin-bottom:6px;
+}
+.pad span{font-size:13px;color:var(--muted)}
+.pad.active{
+  transform:translateY(-6px) scale(1.02);
+  box-shadow:0 12px 30px rgba(0,0,0,0.7),0 0 20px rgba(255,255,255,0.03) inset;
+  border:1px solid rgba(255,255,255,0.04);
+}
+#controls{margin-top:16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+#controls label{font-size:13px;color:var(--muted)}
+#controls input[type=range]{width:200px}
+footer{margin-top:12px;color:var(--muted);font-size:12px}
+small code{background:rgba(255,255,255,0.03);padding:2px 6px;border-radius:4px;color:#cdd6df}
+CSS
