@@ -60,6 +60,19 @@
         <option value="16">16 voices</option>
       </select>
       <button id="recordBtn">Record (WIP)</button>
+      <!-- Background track controls -->
+      <label for="bgVol">Backing Track</label>
+      <div id="bgControls">
+        <button id="bgPlay">Play</button>
+        <button id="bgStop">Stop</button>
+        <label for="bgVol">BG Vol</label>
+        <input id="bgVol" type="range" min="0" max="1" step="0.01" value="0.35">
+        <select id="bgLoopSelect">
+          <option value="samples/backing_loop_1.mp3">Loop 1</option>
+          <option value="samples/backing_loop_2.mp3">Loop 2</option>
+        </select>
+      </div>
+
     </section>
 
     <section id="uploader">

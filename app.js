@@ -5,6 +5,51 @@ const master = ctx.createGain();
 master.gain.value = 0.9;
 master.connect(ctx.destination);
 
+// Background track (looping backing music)
+const bgGain = ctx.createGain();
+bgGain.gain.value = 0.35; // default BG volume
+bgGain.connect(master);
+
+let bgBuffer = null;
+let bgSource = null;
+let bgUrl = 'samples/backing_loop_1.mp3'; // default file path (add this file)
+window.bgState = 'stopped';
+
+async function loadBG(url) {
+  try {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('bg fetch failed');
+    const ab = await res.arrayBuffer();
+    bgBuffer = await ctx.decodeAudioData(ab);
+    return true;
+  } catch (e) {
+    console.warn('BG load failed', e);
+    bgBuffer = null;
+    return false;
+  }
+}
+
+function playBG() {
+  if (!bgBuffer) { console.warn('no bg buffer'); return; }
+  stopBG();
+  bgSource = ctx.createBufferSource();
+  bgSource.buffer = bgBuffer;
+  bgSource.loop = true;
+  bgSource.connect(bgGain);
+  bgSource.start();
+  window.bgState = 'playing';
+}
+
+function stopBG() {
+  if (bgSource) {
+    try { bgSource.stop(); } catch(e){}
+    bgSource.disconnect();
+    bgSource = null;
+  }
+  window.bgState = 'stopped';
+}
+
+
 const volumeEl = document.getElementById('volume');
 volumeEl.addEventListener('input', e => master.gain.value = Number(e.target.value));
 
@@ -235,3 +280,27 @@ resetBtn.addEventListener('click', ()=> {
 });
 
 /* end uploader */
+
+// BG UI hookups
+const bgPlayBtn = document.getElementById('bgPlay');
+const bgStopBtn = document.getElementById('bgStop');
+const bgVolEl = document.getElementById('bgVol');
+const bgSelect = document.getElementById('bgLoopSelect');
+
+bgVolEl.addEventListener('input', e => bgGain.gain.value = Number(e.target.value));
+bgPlayBtn.addEventListener('click', async () => {
+  if (ctx.state === 'suspended') await ctx.resume();
+  const url = bgSelect.value;
+  if (url !== bgUrl || !bgBuffer) {
+    bgUrl = url;
+    await loadBG(bgUrl);
+  }
+  playBG();
+});
+bgStopBtn.addEventListener('click', () => stopBG());
+
+bgSelect.addEventListener('change', async (e) => {
+  bgUrl = e.target.value;
+  await loadBG(bgUrl);
+});
+
